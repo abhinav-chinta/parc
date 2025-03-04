@@ -89,31 +89,13 @@
                     <span>arXiv</span>
                   </a>
                 </span>
-                <!-- Video Link. -->
-                <span class="link-block">
-                  <a href="#" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                    </span>
-                    <span>Video</span>
-                  </a>
-                </span>
-                <!-- Code Link. -->
+                <!-- Code & Data Link (merged). -->
                 <span class="link-block">
                   <a href="#" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fab fa-github"></i>
                     </span>
-                    <span>Code</span>
-                  </a>
-                </span>
-                <!-- Dataset Link. -->
-                <span class="link-block">
-                  <a href="#" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="far fa-images"></i>
-                    </span>
-                    <span>Data</span>
+                    <span>Code & Data</span>
                   </a>
                 </span>
               </div>
@@ -156,6 +138,147 @@
     </div>
   </section>
   <!-- End main image -->
+
+  <!-- Method section -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h2 class="title is-3">Method</h2>
+            <div class="content has-text-justified">
+              <p>
+                Our framework, Premise-Augmented Reasoning Chains (PARC), is structured into three primary stages: Premise Extraction, Error Identification, and Accumulation Error Detection. Initially, PARC transforms conventional Linear Reasoning Chains (LRCs) by explicitly identifying premises necessary for each reasoning step. This transformation converts LRCs into a directed acyclic graph structure, improving the traceability and evaluation of the reasoning process.
+              </p>
+              
+              <!-- Baseline vs PARC comparison image -->
+              <div class="columns is-centered">
+                <div class="column has-text-centered">
+                  <img src="static/images/baseline_vs_parc.png" alt="Baseline vs PARC Example" class="publication-image">
+                </div>
+              </div>
+              
+              <h3 class="title is-4">Premise Extraction</h3>
+              <p>
+                The Premise Extraction component converts a Linear Reasoning Chain (LRC), comprising sequentially generated reasoning steps, into a Premise-Augmented Reasoning Chain (PARC). Each step in PARC explicitly links back to its necessary premises. We explore two distinct approaches for premise identification: Aggregative Premise Mapping and Dyadic Premise Mapping.
+              </p>
+              <p>
+                In the Aggregative approach, we query large language models (LLMs) with the entire reasoning context up to the current step to collectively identify all necessary premises simultaneously. Conversely, the Dyadic approach performs a pairwise assessment, where an LLM evaluates the validity of each earlier step as a premise individually. Steps identified as necessary are aggregated into a premise set for the current step. This systematic identification of premises enhances context relevance and reduces distractors, facilitating improved verification accuracy.
+              </p>
+              
+              <h3 class="title is-4">Error Identification</h3>
+              <p>
+                After premises are identified, we systematically evaluate each step for errors. The error identification process involves three primary error categories: Mathematical Errors, Logical Inconsistencies, and Accumulation Errors. Mathematical Errors refer to incorrect calculations or misapplication of formulas, while Logical Inconsistencies occur when a step does not logically follow from its premises. Our method prompts an LLM to evaluate mathematical correctness and logical consistency independently, constrained to the minimal context provided by identified premises.
+              </p>
+              
+              <h3 class="title is-4">Accumulation Error Detection</h3>
+              <p>
+                Accumulation Errors are identified through a dependency graph traversal. Steps that are locally correct but depend on erroneous prior steps (premises) are flagged as accumulation errors. We employ Depth-First Search (DFS) on the PARC structure to systematically identify these dependencies, clearly distinguishing inherent step-level inaccuracies from errors propagated due to faulty premises.
+              </p>
+              
+              <!-- Algorithm image -->
+              <div class="columns is-centered">
+                <div class="column has-text-centered">
+                  <img src="static/images/algorithm.png" alt="Algorithm 1 Constructing and Evaluating PARC" class="publication-image">
+                  <p class="caption">Algorithm 1: Constructing and Evaluating PARC</p>
+                </div>
+              </div>
+              
+              <h3 class="title is-4">Dataset and Evaluation Setup</h3>
+              <p>
+                We developed the Premises and ERrors identification in Language models (PERL) dataset to assess the capabilities of our approach. PERL incorporates reasoning chains from established mathematical reasoning datasets (GSM8K, MATH, Orca-Math, and MetaMathQA), annotated with both premises and error types using OpenAI's GPT-4o. This dataset includes naturally occurring errors as well as systematically introduced synthetic errors, ensuring comprehensive coverage of potential error scenarios.
+              </p>
+              <p>
+                We evaluate PARC's effectiveness using precision, recall, F1-score for premise extraction, and accuracy metrics for error identification. Our experimental setup utilizes both open-source (e.g., Llama, Qwen) and proprietary (e.g., GPT-4o) large language models, comparing our premise-centric verification approach against traditional full-context baseline methods.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Method section -->
+
+  <!-- Results section -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Results</h2>
+
+      <h3 class="title is-4">Performance</h3>
+      <p>
+        We evaluate the effectiveness of Premise-Augmented Reasoning Chains (PARC) in enhancing the error identification capabilities of large language models (LLMs) for mathematical reasoning. Evaluation focuses on two primary aspects: Premise Identification and Error Identification.
+      </p>
+
+      <h3 class="title is-4">Premise Identification</h3>
+      <p>
+        <b>Datasets:</b> The evaluation was conducted across four mathematical reasoning datasets: GSM8K, MATH, Orca Math, and MetaMathQA. These datasets contain diverse mathematical problems ranging from elementary to competition-level questions.
+      </p>
+      <p>
+        <b>Baselines:</b> Premise identification was assessed under two methods—Aggregative Premise Mapping (identifying premises collectively) and Dyadic Premise Mapping (pairwise identification). Models evaluated include Llama 3.1 (8B and 70B parameters), Qwen 2.5 (7B and 32B parameters), and GPT-4 variants (GPT4o-mini and GPT-4o).
+      </p>
+
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <img src="static/images/table1.png" alt="Table 1: Results for Premise Identification under Aggregative Premise Mapping">
+          <p class="caption">
+            Results for Premise Identification under Aggregative Premise Mapping show strong performance from larger models, especially Llama 3.1 70B, Qwen 2.5 32B, and GPT-4o, all achieving over 90% recall consistently across datasets. Notably, Aggregative mapping significantly outperformed Dyadic mapping, demonstrating higher precision and recall, suggesting that collective identification of premises is more effective and efficient for LLMs.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="title is-4">Error Identification</h3>
+      <p>
+        <b>Datasets:</b> Error identification was tested using the PERL dataset (Premises and ERrors identification in LLMs), comprising correct solutions (positives), incorrect solutions (negatives), and synthetically generated negative examples to simulate realistic errors.
+      </p>
+      <p>
+        <b>Baselines:</b> Error detection was compared across two primary contexts: Full Context (standard LLM inference over the entire reasoning chain) and Model Premises (reasoning verification using identified premises). Models included are Llama 3.1 (8B and 70B), Qwen 2.5 (7B, 32B, and 72B), GPT4o-mini, and GPT-4o.
+      </p>
+
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <img src="static/images/table2.png" alt="Table 2: Comparative results between Aggregative and Dyadic Premise Mapping">
+          <p class="caption">
+            Comparison between Aggregative and Dyadic Premise Mapping methods, showing the superior performance of the Aggregative approach.
+          </p>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <img src="static/images/table3.png" alt="Table 3: Results of Error Identification across different models">
+          <p class="caption">
+            Results illustrate that the use of Model Premises substantially improves accuracy in error identification across all models, with larger models such as GPT-4o and Llama 3.1 70B benefiting the most. In particular, GPT-4o improved error identification accuracy from 68.52% in the Full Context baseline to 79.82% under Model Premises on the GSM8K dataset.
+          </p>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <img src="static/images/table4.png" alt="Table 4: Comparison of oracle versus model-generated premises">
+          <p class="caption">
+            Comparison of oracle versus model-generated premises demonstrates that error identification accuracy remains robust when LLM-generated premises are used, reflecting that current models achieve high-quality premise identification.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="title is-4">Detailed Error Type Analysis</h3>
+      
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <img src="static/images/table5.png" alt="Table 5: Analysis of error types and detection accuracy">
+          <p class="caption">
+            Further analysis highlights challenges in detecting accumulation errors compared to native errors (mathematical and logical). Under Model Premises, identification accuracy significantly increased for both types, though accumulation errors remained the hardest to detect, improving from 12% (Full Context baseline) to approximately 57.54% (Model Premises).
+          </p>
+        </div>
+      </div>
+
+      <h3 class="title is-4">Summary</h3>
+      <p>
+        Our evaluations indicate that converting Linear Reasoning Chains to PARCs and verifying steps under identified premises significantly enhances the accuracy and reliability of error detection in LLMs. The results underscore the importance of premise-aware verification, particularly for detecting subtle accumulation errors that propagate through reasoning chains.
+      </p>
+    </div>
+  </section>
+  <!-- End Results section -->
 
   <!--BibTex citation -->
   <section class="section" id="BibTeX">
